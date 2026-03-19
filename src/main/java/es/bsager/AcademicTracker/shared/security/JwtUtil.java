@@ -1,4 +1,4 @@
-package es.bsager.AcademicTracker.shared.security.jwt;
+package es.bsager.AcademicTracker.shared.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

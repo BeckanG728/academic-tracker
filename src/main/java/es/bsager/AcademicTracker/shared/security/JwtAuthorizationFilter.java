@@ -1,4 +1,4 @@
-package es.bsager.AcademicTracker.shared.security.jwt;
+package es.bsager.AcademicTracker.shared.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +21,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
-
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
@@ -33,7 +32,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
 
         // Validar header
-        if (header == null && !header.startsWith("Bearer ")) {
+        if (header == null || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -56,8 +55,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             // Pasar username
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            if (jwtUtil.isExpired(token)) {
-
+            if (!jwtUtil.isExpired(token)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,

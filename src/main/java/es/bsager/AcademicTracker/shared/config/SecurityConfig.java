@@ -1,7 +1,7 @@
 package es.bsager.AcademicTracker.shared.config;
 
 
-import es.bsager.AcademicTracker.shared.security.jwt.JwtAuthorizationFilter;
+import es.bsager.AcademicTracker.shared.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authorizeHttpRequests(auth -> auth // NO authorizeRequests()
                         // Rutas públicas - NO pasan por JwtAuthorizationFilter
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         // Requieren autenticacion
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider(passwordEncoder()))
