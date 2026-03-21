@@ -1,4 +1,11 @@
 package es.bsager.AcademicTracker.modules.auth.dto.response;
 
-public record AuthResponse() {
+import java.util.UUID;
+
+public record AuthResponse(
+        UUID id,
+        String username,
+        String role,
+        String token
+) {
 }

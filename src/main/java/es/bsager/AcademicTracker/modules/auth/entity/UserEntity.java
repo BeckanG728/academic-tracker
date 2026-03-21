@@ -3,6 +3,7 @@ package es.bsager.AcademicTracker.modules.auth.entity;
 import es.bsager.AcademicTracker.modules.auth.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserEntity implements UserDetails {
@@ -33,18 +35,9 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false, length = 20)
     private Role role;
 
-    @Column(name = "student_id", nullable = false, unique = true)
-    private UUID studenId;
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
     }
 
     @Override

@@ -11,6 +11,7 @@ public class ApiResponse<T> {
     private final boolean success;
     private final String message;
     private final T data;
+    @Builder.Default
     private final Instant timestamp = Instant.now();
 
     public static <T> ApiResponse<T> success(T data) {
