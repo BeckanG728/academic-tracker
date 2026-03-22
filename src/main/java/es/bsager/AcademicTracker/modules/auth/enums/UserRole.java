@@ -1,5 +1,5 @@
 package es.bsager.AcademicTracker.modules.auth.enums;
 
-public enum Role {
+public enum UserRole {
     STUDENT, ADMIN
 }

@@ -1,11 +1,15 @@
 package es.bsager.AcademicTracker.modules.auth.dto.response;
 
+import lombok.Builder;
+
 import java.util.UUID;
 
+@Builder
 public record AuthResponse(
-        UUID id,
-        String username,
-        String role,
-        String token
+        String token,
+        String tokenType,   // siempre "Bearer"
+        long expiresIn,     // segundos
+        UUID userId,
+        String username
 ) {
 }
