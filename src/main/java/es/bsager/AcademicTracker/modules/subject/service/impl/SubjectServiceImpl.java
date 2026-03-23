@@ -7,6 +7,7 @@ import es.bsager.AcademicTracker.modules.subject.mapper.SubjectMapper;
 import es.bsager.AcademicTracker.modules.subject.repository.SubjectRepository;
 import es.bsager.AcademicTracker.modules.subject.service.SubjectService;
 import es.bsager.AcademicTracker.shared.exception.SubjectNotFoundException;
+import es.bsager.AcademicTracker.shared.security.AuthenticatedUserProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
     private final SubjectMapper subjectMapper;
+    private final AuthenticatedUserProvider authenticatedUserProvider;
 
 
     @Override
@@ -27,7 +29,7 @@ public class SubjectServiceImpl implements SubjectService {
             );
         }
 
-        Subject subjectToSave = subjectMapper.toEntity(request);
+        Subject subjectToSave = subjectMapper.toEntity(request, authenticatedUserProvider.getCurrentUserId());
         Subject saved = subjectRepository.save(subjectToSave);
 
         return subjectMapper.toResponse(saved);
