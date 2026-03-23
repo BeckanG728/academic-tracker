@@ -2,12 +2,17 @@ package es.bsager.AcademicTracker.modules.subject.dto.response;
 
 import es.bsager.AcademicTracker.modules.subject.enums.SubjectStatus;
 
-public record SubjectResponse(
-        String id,
+import java.time.Instant;
+import java.util.UUID;
+
+public record CreateSubjectResponse(
+        UUID id,
         String name,
         String code,
         int credits,
         String semester,
-        SubjectStatus status
+        String teacherName,
+        SubjectStatus status,
+        Instant createAt
 ) {
 }

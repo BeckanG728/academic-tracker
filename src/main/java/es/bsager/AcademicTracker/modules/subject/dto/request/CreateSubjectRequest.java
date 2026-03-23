@@ -1,6 +1,6 @@
 package es.bsager.AcademicTracker.modules.subject.dto.request;
 
-public record SubjectRequest(
+public record CreateSubjectRequest(
         String name,
         String code,
         int credits,

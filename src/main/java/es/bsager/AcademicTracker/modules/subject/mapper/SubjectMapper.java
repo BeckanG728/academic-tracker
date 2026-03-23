@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.subject.mapper;
 
-import es.bsager.AcademicTracker.modules.subject.dto.request.SubjectRequest;
+import es.bsager.AcademicTracker.modules.subject.dto.request.CreateSubjectRequest;
+import es.bsager.AcademicTracker.modules.subject.dto.response.CreateSubjectResponse;
 import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectResponse;
 import es.bsager.AcademicTracker.modules.subject.entity.Subject;
 import org.mapstruct.Mapper;
@@ -16,8 +17,9 @@ public interface SubjectMapper {
     @Mapping(target = "createAt", ignore = true)
     @Mapping(target = "updateAt", ignore = true)
     @Mapping(target = "userId", source = "userId")
-    Subject toEntity(SubjectRequest request, UUID userId);
+    Subject toEntity(CreateSubjectRequest request, UUID userId);
 
-    @Mapping(target = "status", expression = "java(entity.getStatus().name())")
-    SubjectResponse toResponse(Subject entity);
+    CreateSubjectResponse toResponse(Subject entity);
+
+    SubjectResponse toSubjectResponse(Subject entity);
 }
