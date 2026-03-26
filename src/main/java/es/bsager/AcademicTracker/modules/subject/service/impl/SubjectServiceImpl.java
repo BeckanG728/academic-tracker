@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.subject.service.impl;
 
 import es.bsager.AcademicTracker.modules.subject.dto.request.CreateSubjectRequest;
+import es.bsager.AcademicTracker.modules.subject.dto.request.UpdateStatusRequest;
 import es.bsager.AcademicTracker.modules.subject.dto.request.UpdateSubjectRequest;
 import es.bsager.AcademicTracker.modules.subject.dto.response.CreateSubjectResponse;
 import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectResponse;
@@ -93,6 +94,17 @@ public class SubjectServiceImpl implements SubjectService {
         subjectToUpdate.setTeacherName(request.teacherName());
         Subject updated = subjectRepository.save(subjectToUpdate);
 
+        return subjectMapper.toSubjectResponse(updated);
+    }
+
+    @Override
+    @Transactional
+    public SubjectResponse updateSubjectStatus(UUID subjectId, UpdateStatusRequest request) {
+        Subject subjectToUpdate = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new SubjectNotFoundException("Asignatura no encontrada"));
+
+        subjectToUpdate.setStatus(request.status());
+        Subject updated = subjectRepository.save(subjectToUpdate);
         return subjectMapper.toSubjectResponse(updated);
     }
 }

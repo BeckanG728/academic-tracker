@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.subject.service;
 
 import es.bsager.AcademicTracker.modules.subject.dto.request.CreateSubjectRequest;
+import es.bsager.AcademicTracker.modules.subject.dto.request.UpdateStatusRequest;
 import es.bsager.AcademicTracker.modules.subject.dto.request.UpdateSubjectRequest;
 import es.bsager.AcademicTracker.modules.subject.dto.response.CreateSubjectResponse;
 import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectResponse;
@@ -19,4 +20,6 @@ public interface SubjectService {
     SubjectSummaryResponse getSummary(UUID subjectId);
 
     SubjectResponse updateSubject(UUID subjectId, UpdateSubjectRequest request);
+
+    SubjectResponse updateSubjectStatus(UUID subjectId, UpdateStatusRequest request);
 }

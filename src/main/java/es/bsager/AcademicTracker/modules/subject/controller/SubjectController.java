@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.subject.controller;
 
 import es.bsager.AcademicTracker.modules.subject.dto.request.CreateSubjectRequest;
+import es.bsager.AcademicTracker.modules.subject.dto.request.UpdateStatusRequest;
 import es.bsager.AcademicTracker.modules.subject.dto.request.UpdateSubjectRequest;
 import es.bsager.AcademicTracker.modules.subject.dto.response.CreateSubjectResponse;
 import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectResponse;
@@ -49,6 +50,14 @@ public class SubjectController {
             @PathVariable UUID subjectId,
             @RequestBody UpdateSubjectRequest request) {
         SubjectResponse data = subjectService.updateSubject(subjectId, request);
+        return ResponseEntity.ok(ApiResponse.success(data));
+    }
+
+    @PatchMapping("/{subjectId}/status")
+    public ResponseEntity<ApiResponse<SubjectResponse>> updateSubjectStatus(
+            @PathVariable UUID subjectId,
+            @RequestBody UpdateStatusRequest request) {
+        SubjectResponse data = subjectService.updateSubjectStatus(subjectId, request);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 }
