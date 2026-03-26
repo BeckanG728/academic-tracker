@@ -11,6 +11,7 @@ import es.bsager.AcademicTracker.modules.subject.enums.SubjectStatus;
 import es.bsager.AcademicTracker.modules.subject.mapper.SubjectMapper;
 import es.bsager.AcademicTracker.modules.subject.repository.SubjectRepository;
 import es.bsager.AcademicTracker.modules.subject.service.SubjectService;
+import es.bsager.AcademicTracker.shared.exception.ResourceHasDependenciesException;
 import es.bsager.AcademicTracker.shared.exception.SubjectNotFoundException;
 import es.bsager.AcademicTracker.shared.security.AuthenticatedUserProvider;
 import es.bsager.AcademicTracker.shared.util.port.GradesPort;
@@ -106,5 +107,16 @@ public class SubjectServiceImpl implements SubjectService {
         subjectToUpdate.setStatus(request.status());
         Subject updated = subjectRepository.save(subjectToUpdate);
         return subjectMapper.toSubjectResponse(updated);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSubject(UUID subjectId) {
+        if (gradesPort.existsBySubjectId(subjectId)) {
+            throw new ResourceHasDependenciesException(
+                    "Eliminacion denegada porque la asignatura tiene notas asociadas"
+            );
+        }
+        subjectRepository.deleteById(subjectId);
     }
 }

@@ -5,4 +5,6 @@ import java.util.UUID;
 
 public interface GradesPort {
     BigDecimal calculateModuleAverage(UUID subjectId);
+
+    boolean existsBySubjectId(UUID subjectId);
 }

@@ -60,4 +60,10 @@ public class SubjectController {
         SubjectResponse data = subjectService.updateSubjectStatus(subjectId, request);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
+
+    @DeleteMapping("{subjectId}")
+    public ResponseEntity<ApiResponse<Void>> deleteSubject(@PathVariable UUID subjectId) {
+        subjectService.deleteSubject(subjectId);
+        return ResponseEntity.noContent().build();
+    }
 }

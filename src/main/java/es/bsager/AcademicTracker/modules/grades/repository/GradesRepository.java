@@ -18,4 +18,6 @@ public interface GradesRepository extends JpaRepository<Grades, UUID> {
     BigDecimal sumValuesBySubjectIdAndTypeIn(
             @Param("subjectId") UUID subjectId,
             @Param("types") Iterable<GradeType> types);
+
+    boolean existsBySubjectId(UUID subjectId);
 }

@@ -22,4 +22,6 @@ public interface SubjectService {
     SubjectResponse updateSubject(UUID subjectId, UpdateSubjectRequest request);
 
     SubjectResponse updateSubjectStatus(UUID subjectId, UpdateStatusRequest request);
+
+    void deleteSubject(UUID subjectId);
 }

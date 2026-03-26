@@ -24,4 +24,9 @@ public class GradesAdapter implements GradesPort {
         BigDecimal sum = gradesRepository.sumValuesBySubjectIdAndTypeIn(subjectId, GradeType.getModules());
         return sum.divide(BigDecimal.valueOf(4), 2, RoundingMode.HALF_UP);
     }
+
+    @Override
+    public boolean existsBySubjectId(UUID subjectId) {
+        return gradesRepository.existsBySubjectId(subjectId);
+    }
 }
