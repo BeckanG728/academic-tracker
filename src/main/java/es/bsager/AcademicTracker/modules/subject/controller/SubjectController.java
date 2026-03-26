@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.subject.controller;
 
 import es.bsager.AcademicTracker.modules.subject.dto.request.CreateSubjectRequest;
+import es.bsager.AcademicTracker.modules.subject.dto.request.UpdateSubjectRequest;
 import es.bsager.AcademicTracker.modules.subject.dto.response.CreateSubjectResponse;
 import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectResponse;
 import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectSummaryResponse;
@@ -40,6 +41,14 @@ public class SubjectController {
     @GetMapping("/{subjectId}")
     public ResponseEntity<ApiResponse<SubjectSummaryResponse>> getSummary(@PathVariable UUID subjectId) {
         SubjectSummaryResponse data = subjectService.getSummary(subjectId);
+        return ResponseEntity.ok(ApiResponse.success(data));
+    }
+
+    @PutMapping("/{subjectId}")
+    public ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(
+            @PathVariable UUID subjectId,
+            @RequestBody UpdateSubjectRequest request) {
+        SubjectResponse data = subjectService.updateSubject(subjectId, request);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 }

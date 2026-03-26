@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.subject.service.impl;
 
 import es.bsager.AcademicTracker.modules.subject.dto.request.CreateSubjectRequest;
+import es.bsager.AcademicTracker.modules.subject.dto.request.UpdateSubjectRequest;
 import es.bsager.AcademicTracker.modules.subject.dto.response.CreateSubjectResponse;
 import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectResponse;
 import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectSummaryResponse;
@@ -77,5 +78,21 @@ public class SubjectServiceImpl implements SubjectService {
 
         BigDecimal average = gradesPort.calculateModuleAverage(subjectId);
         return subjectMapper.toSubjectSummaryResponse(subject, average);
+    }
+
+    @Override
+    @Transactional
+    public SubjectResponse updateSubject(UUID subjectId, UpdateSubjectRequest request) {
+
+        Subject subjectToUpdate = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new SubjectNotFoundException("Asignatura no encontrada"));
+
+        subjectToUpdate.setName(request.name());
+        subjectToUpdate.setCredits(request.credits());
+        subjectToUpdate.setSemester(request.semester());
+        subjectToUpdate.setTeacherName(request.teacherName());
+        Subject updated = subjectRepository.save(subjectToUpdate);
+
+        return subjectMapper.toSubjectResponse(updated);
     }
 }

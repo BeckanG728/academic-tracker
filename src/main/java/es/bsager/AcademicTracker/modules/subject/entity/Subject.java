@@ -3,10 +3,7 @@ package es.bsager.AcademicTracker.modules.subject.entity;
 
 import es.bsager.AcademicTracker.modules.subject.enums.SubjectStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -14,6 +11,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "subjects")
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
