@@ -3,10 +3,12 @@ package es.bsager.AcademicTracker.modules.subject.mapper;
 import es.bsager.AcademicTracker.modules.subject.dto.request.CreateSubjectRequest;
 import es.bsager.AcademicTracker.modules.subject.dto.response.CreateSubjectResponse;
 import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectResponse;
+import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectSummaryResponse;
 import es.bsager.AcademicTracker.modules.subject.entity.Subject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring")
@@ -22,4 +24,7 @@ public interface SubjectMapper {
     CreateSubjectResponse toResponse(Subject entity);
 
     SubjectResponse toSubjectResponse(Subject entity);
+
+    @Mapping(target = "currentAverage", source = "currentAverage")
+    SubjectSummaryResponse toSubjectSummaryResponse(Subject entity, BigDecimal currentAverage);
 }
