@@ -40,4 +40,12 @@ public class GradesController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    @GetMapping("/grades/{gradeId}")
+    public ResponseEntity<ApiResponse<GradeDetailsResponse>> getGrade(
+            @PathVariable UUID subjectId,
+            @PathVariable UUID gradeId
+    ) {
+        GradeDetailsResponse response = gradesService.getGrade(subjectId, gradeId);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
 }

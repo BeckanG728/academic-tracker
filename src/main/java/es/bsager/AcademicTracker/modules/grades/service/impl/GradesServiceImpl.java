@@ -8,10 +8,11 @@ import es.bsager.AcademicTracker.modules.grades.enums.GradeType;
 import es.bsager.AcademicTracker.modules.grades.mapper.GradesMapper;
 import es.bsager.AcademicTracker.modules.grades.repository.GradesRepository;
 import es.bsager.AcademicTracker.modules.grades.service.GradesService;
-import jakarta.transaction.Transactional;
+import es.bsager.AcademicTracker.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,6 +45,7 @@ public class GradesServiceImpl implements GradesService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GradeDetailsResponse> getGradesBySubject(UUID subjectId, GradeType type) {
         Specification<Grades> spec = (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("subjectId"), subjectId);
@@ -56,5 +58,18 @@ public class GradesServiceImpl implements GradesService {
 
         List<Grades> grades = gradesRepository.findAll(spec);
         return grades.stream().map(gradesMapper::toDetailsResponse).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public GradeDetailsResponse getGrade(UUID subjectId, UUID gradeId) {
+        Specification<Grades> spec = (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("subjectId"), subjectId);
+        spec = spec.and((root, query, cb) -> cb.equal(root.get("id"), gradeId));
+
+        Grades grades = gradesRepository.findOne(spec).orElseThrow(() ->
+                new ResourceNotFoundException("No se encontró la nota con ID: " + gradeId)
+        );
+        return gradesMapper.toDetailsResponse(grades);
     }
 }

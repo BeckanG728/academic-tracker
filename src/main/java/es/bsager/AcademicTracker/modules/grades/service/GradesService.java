@@ -12,4 +12,6 @@ public interface GradesService {
     RegisterGradesResponse registerGrades(RegisterGradesRequest request, UUID subjectId);
 
     List<GradeDetailsResponse> getGradesBySubject(UUID subjectId, GradeType type);
+
+    GradeDetailsResponse getGrade(UUID subjectId, UUID gradeId);
 }
