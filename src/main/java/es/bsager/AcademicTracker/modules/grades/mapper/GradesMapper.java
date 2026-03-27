@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.grades.mapper;
 
 import es.bsager.AcademicTracker.modules.grades.dto.request.RegisterGradesRequest;
+import es.bsager.AcademicTracker.modules.grades.dto.response.GradeDetailsResponse;
 import es.bsager.AcademicTracker.modules.grades.dto.response.RegisterGradesResponse;
 import es.bsager.AcademicTracker.modules.grades.entity.Grades;
 import org.mapstruct.Mapper;
@@ -18,4 +19,6 @@ public interface GradesMapper {
     Grades toEntity(RegisterGradesRequest request, UUID subjectId);
 
     RegisterGradesResponse toResponse(Grades grades);
+
+    GradeDetailsResponse toDetailsResponse(Grades grades);
 }

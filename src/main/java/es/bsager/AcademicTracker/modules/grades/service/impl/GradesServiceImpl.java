@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.grades.service.impl;
 
 import es.bsager.AcademicTracker.modules.grades.dto.request.RegisterGradesRequest;
+import es.bsager.AcademicTracker.modules.grades.dto.response.GradeDetailsResponse;
 import es.bsager.AcademicTracker.modules.grades.dto.response.RegisterGradesResponse;
 import es.bsager.AcademicTracker.modules.grades.entity.Grades;
 import es.bsager.AcademicTracker.modules.grades.enums.GradeType;
@@ -9,8 +10,10 @@ import es.bsager.AcademicTracker.modules.grades.repository.GradesRepository;
 import es.bsager.AcademicTracker.modules.grades.service.GradesService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -38,5 +41,20 @@ public class GradesServiceImpl implements GradesService {
         Grades save = gradesRepository.save(gradesToSave);
 
         return gradesMapper.toResponse(save);
+    }
+
+    @Override
+    public List<GradeDetailsResponse> getGradesBySubject(UUID subjectId, GradeType type) {
+        Specification<Grades> spec = (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("subjectId"), subjectId);
+
+        if (type != null) {
+            spec = spec.and(
+                    (root, query, cb) -> cb.equal(root.get("type"), type)
+            );
+        }
+
+        List<Grades> grades = gradesRepository.findAll(spec);
+        return grades.stream().map(gradesMapper::toDetailsResponse).toList();
     }
 }
