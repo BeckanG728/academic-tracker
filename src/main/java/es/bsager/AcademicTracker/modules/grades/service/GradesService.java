@@ -17,4 +17,6 @@ public interface GradesService {
     GradeDetailsResponse getGrade(UUID subjectId, UUID gradeId);
 
     GradeDetailsResponse updateGrade(UUID subjectId, UUID gradeId, UpdateGradeRequest request);
+
+    void deleteGrade(UUID subjectId, UUID gradeId);
 }

@@ -87,8 +87,23 @@ public class GradesServiceImpl implements GradesService {
 
         grades.setValue(request.value());
         grades.setNotes(request.notes());
-        
+
         Grades gradesUpdated = gradesRepository.save(grades);
         return gradesMapper.toDetailsResponse(gradesUpdated);
+    }
+
+    @Override
+    @Transactional
+    public void deleteGrade(UUID subjectId, UUID gradeId) {
+        Specification<Grades> spec = (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("subjectId"), subjectId);
+
+        spec = spec.and((root, query, cb) -> cb.equal(root.get("id"), gradeId));
+
+        Grades grades = gradesRepository.findOne(spec).orElseThrow(() ->
+                new ResourceNotFoundException("No se encontró la nota con ID: " + gradeId)
+        );
+
+        gradesRepository.delete(grades);
     }
 }

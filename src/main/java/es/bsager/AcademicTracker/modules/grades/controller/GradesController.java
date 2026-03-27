@@ -59,4 +59,13 @@ public class GradesController {
         GradeDetailsResponse response = gradesService.updateGrade(subjectId, gradeId, request);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
+    @DeleteMapping("/grades/{gradeId}")
+    public ResponseEntity<Void> deleteGrade(
+            @PathVariable UUID subjectId,
+            @PathVariable UUID gradeId
+    ) {
+        gradesService.deleteGrade(subjectId, gradeId);
+        return ResponseEntity.noContent().build();
+    }
 }

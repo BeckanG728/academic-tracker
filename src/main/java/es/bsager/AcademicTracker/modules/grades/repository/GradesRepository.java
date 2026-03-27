@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface GradesRepository extends JpaRepository<Grades, UUID>, JpaSpecificationExecutor<Grades> {
@@ -21,4 +22,6 @@ public interface GradesRepository extends JpaRepository<Grades, UUID>, JpaSpecif
             @Param("types") Iterable<GradeType> types);
 
     boolean existsBySubjectId(UUID subjectId);
+
+    Optional<Grades> findBySubjectIdAndType(UUID subjectId, GradeType type);
 }
