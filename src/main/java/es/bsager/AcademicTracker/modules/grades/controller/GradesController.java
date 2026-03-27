@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.grades.controller;
 
 import es.bsager.AcademicTracker.modules.grades.dto.request.RegisterGradesRequest;
+import es.bsager.AcademicTracker.modules.grades.dto.request.UpdateGradeRequest;
 import es.bsager.AcademicTracker.modules.grades.dto.response.GradeDetailsResponse;
 import es.bsager.AcademicTracker.modules.grades.dto.response.RegisterGradesResponse;
 import es.bsager.AcademicTracker.modules.grades.enums.GradeType;
@@ -46,6 +47,16 @@ public class GradesController {
             @PathVariable UUID gradeId
     ) {
         GradeDetailsResponse response = gradesService.getGrade(subjectId, gradeId);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @PutMapping("/grades/{gradeId}")
+    public ResponseEntity<ApiResponse<GradeDetailsResponse>> updateGrade(
+            @PathVariable UUID subjectId,
+            @PathVariable UUID gradeId,
+            @Valid @RequestBody UpdateGradeRequest request
+    ) {
+        GradeDetailsResponse response = gradesService.updateGrade(subjectId, gradeId, request);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.grades.service.impl;
 
 import es.bsager.AcademicTracker.modules.grades.dto.request.RegisterGradesRequest;
+import es.bsager.AcademicTracker.modules.grades.dto.request.UpdateGradeRequest;
 import es.bsager.AcademicTracker.modules.grades.dto.response.GradeDetailsResponse;
 import es.bsager.AcademicTracker.modules.grades.dto.response.RegisterGradesResponse;
 import es.bsager.AcademicTracker.modules.grades.entity.Grades;
@@ -71,5 +72,23 @@ public class GradesServiceImpl implements GradesService {
                 new ResourceNotFoundException("No se encontró la nota con ID: " + gradeId)
         );
         return gradesMapper.toDetailsResponse(grades);
+    }
+
+    @Override
+    @Transactional
+    public GradeDetailsResponse updateGrade(UUID subjectId, UUID gradeId, UpdateGradeRequest request) {
+        Specification<Grades> spec = (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("subjectId"), subjectId);
+        spec = spec.and((root, query, cb) -> cb.equal(root.get("id"), gradeId));
+
+        Grades grades = gradesRepository.findOne(spec).orElseThrow(() ->
+                new ResourceNotFoundException("No se encontró la nota con ID: " + gradeId)
+        );
+
+        grades.setValue(request.value());
+        grades.setNotes(request.notes());
+        
+        Grades gradesUpdated = gradesRepository.save(grades);
+        return gradesMapper.toDetailsResponse(gradesUpdated);
     }
 }

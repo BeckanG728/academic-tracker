@@ -1,6 +1,7 @@
 package es.bsager.AcademicTracker.modules.grades.service;
 
 import es.bsager.AcademicTracker.modules.grades.dto.request.RegisterGradesRequest;
+import es.bsager.AcademicTracker.modules.grades.dto.request.UpdateGradeRequest;
 import es.bsager.AcademicTracker.modules.grades.dto.response.GradeDetailsResponse;
 import es.bsager.AcademicTracker.modules.grades.dto.response.RegisterGradesResponse;
 import es.bsager.AcademicTracker.modules.grades.enums.GradeType;
@@ -14,4 +15,6 @@ public interface GradesService {
     List<GradeDetailsResponse> getGradesBySubject(UUID subjectId, GradeType type);
 
     GradeDetailsResponse getGrade(UUID subjectId, UUID gradeId);
+
+    GradeDetailsResponse updateGrade(UUID subjectId, UUID gradeId, UpdateGradeRequest request);
 }

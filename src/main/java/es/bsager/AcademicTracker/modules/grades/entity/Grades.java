@@ -3,10 +3,7 @@ package es.bsager.AcademicTracker.modules.grades.entity;
 
 import es.bsager.AcademicTracker.modules.grades.enums.GradeType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -15,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "grades")
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
