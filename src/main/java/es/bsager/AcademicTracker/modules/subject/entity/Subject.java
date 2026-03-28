@@ -24,7 +24,7 @@ public class Subject {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private String code;
 
     @Column(nullable = false)

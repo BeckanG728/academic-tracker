@@ -9,6 +9,7 @@ import es.bsager.AcademicTracker.modules.subject.dto.response.SubjectSummaryResp
 import es.bsager.AcademicTracker.modules.subject.enums.SubjectStatus;
 import es.bsager.AcademicTracker.modules.subject.service.SubjectService;
 import es.bsager.AcademicTracker.shared.response.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class SubjectController {
     @PutMapping("/{subjectId}")
     public ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(
             @PathVariable UUID subjectId,
-            @RequestBody UpdateSubjectRequest request) {
+            @Valid @RequestBody UpdateSubjectRequest request) {
         SubjectResponse data = subjectService.updateSubject(subjectId, request);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
@@ -56,7 +57,7 @@ public class SubjectController {
     @PatchMapping("/{subjectId}/status")
     public ResponseEntity<ApiResponse<SubjectResponse>> updateSubjectStatus(
             @PathVariable UUID subjectId,
-            @RequestBody UpdateStatusRequest request) {
+            @Valid @RequestBody UpdateStatusRequest request) {
         SubjectResponse data = subjectService.updateSubjectStatus(subjectId, request);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
