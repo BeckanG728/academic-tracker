@@ -4,4 +4,6 @@ import java.util.UUID;
 
 public interface SubjectPort {
     Boolean existsById(UUID subjectId);
+
+    String getSubjectName(UUID subjectId);
 }
