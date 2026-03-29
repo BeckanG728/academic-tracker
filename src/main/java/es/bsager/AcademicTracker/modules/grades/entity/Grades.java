@@ -26,10 +26,10 @@ public class Grades {
     private BigDecimal value;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 10, updatable = false)
     private GradeType type;
 
-    @Column(nullable = true)
+    @Column
     private String notes;
 
     @Column(nullable = false)

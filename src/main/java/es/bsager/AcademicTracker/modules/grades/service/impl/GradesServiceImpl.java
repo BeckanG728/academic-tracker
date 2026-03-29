@@ -10,6 +10,7 @@ import es.bsager.AcademicTracker.modules.grades.mapper.GradesMapper;
 import es.bsager.AcademicTracker.modules.grades.repository.GradesRepository;
 import es.bsager.AcademicTracker.modules.grades.service.GradesService;
 import es.bsager.AcademicTracker.shared.exception.ResourceNotFoundException;
+import es.bsager.AcademicTracker.shared.util.port.SubjectPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -24,25 +25,42 @@ public class GradesServiceImpl implements GradesService {
 
     private final GradesRepository gradesRepository;
     private final GradesMapper gradesMapper;
+    private final SubjectPort subjectPort;
 
     @Override
     @Transactional
     public RegisterGradesResponse registerGrades(RegisterGradesRequest request, UUID subjectId) {
 
+        if (!subjectPort.existsById(subjectId)) {
+            throw new ResourceNotFoundException("No se encontró la materia con ID: " + subjectId);
+        }
+
         if (gradesRepository.existsBySubjectIdAndType(subjectId, request.type())) {
             throw new IllegalArgumentException("Ya existe una calificación de tipo " + request.type() + " para esta materia");
         }
 
-        if (request.type().equals(GradeType.FINAL)) {
-            if (gradesRepository.countBySubjectIdAndTypeIn(subjectId, GradeType.getModules()) < 4) {
-                throw new IllegalArgumentException("No se puede registrar la nota final sin antes registrar las 4 notas modulares");
-            }
-        }
+        validatePreviousModuleExists(subjectId, request.type());
 
         Grades gradesToSave = gradesMapper.toEntity(request, subjectId);
         Grades save = gradesRepository.save(gradesToSave);
 
         return gradesMapper.toResponse(save);
+    }
+
+    private void validatePreviousModuleExists(UUID subjectId, GradeType type) {
+        if (type.getIndex() == 0) {
+            return; // Módulo 1 no requiere validación
+        }
+
+        GradeType previousModule = GradeType.values()[type.getIndex() - 1];
+        boolean previousExists = gradesRepository.existsBySubjectIdAndType(subjectId, previousModule);
+
+        if (!previousExists) {
+            throw new IllegalArgumentException(
+                    String.format("No se puede registrar %s. Debe registrar %s primero",
+                            type, previousModule)
+            );
+        }
     }
 
     @Override
