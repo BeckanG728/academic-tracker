@@ -15,4 +15,6 @@ public interface ScheduleService {
     List<ScheduleDetailsResponse> getSchedulesBySubjectId(UUID subjectId);
 
     Map<String, List<SchedulesSummaryResponse>> getAllSchedules();
+
+    ScheduleRegisterResponse updateSchedule(UUID subjectId, UUID scheduleId, ScheduleRegisterRequest request);
 }

@@ -8,8 +8,10 @@ import es.bsager.AcademicTracker.modules.schedule.entity.Schedule;
 import es.bsager.AcademicTracker.modules.schedule.mapper.ScheduleMapper;
 import es.bsager.AcademicTracker.modules.schedule.repository.ScheduleRepository;
 import es.bsager.AcademicTracker.modules.schedule.service.ScheduleService;
+import es.bsager.AcademicTracker.shared.exception.ResourceNotFoundException;
 import es.bsager.AcademicTracker.shared.util.port.SubjectPort;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
@@ -94,5 +97,38 @@ public class ScheduleServiceImpl implements ScheduleService {
                             return scheduleMapper.toSummaryResponse(schedule, subjectName);
                         }, Collectors.toList())
                 ));
+    }
+
+    @Override
+    @Transactional
+    public ScheduleRegisterResponse updateSchedule(UUID subjectId, UUID scheduleId, ScheduleRegisterRequest request) {
+        log.info("Inicia proceso de actualizacion");
+        if (!request.startTime().isBefore(request.endTime())) {
+            throw new IllegalArgumentException("La hora de inicio debe ser anterior a la hora de finalización");
+        }
+
+        log.info("Validacion hora inicio - fin pasada");
+        validationOverlap(request);
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .filter(subject -> subject.getSubjectId().equals(subjectId))
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Horario no encontrado para la asignatura especificada")
+                );
+
+        log.info("Se recupero el horario");
+        schedule.setStartTime(request.startTime());
+        schedule.setEndTime(request.endTime());
+        schedule.setDayOfWeek(request.dayOfWeek());
+        schedule.setClassroom(request.classroom());
+
+        log.info("Se cambio los datos");
+
+        Schedule updated = scheduleRepository.save(schedule);
+
+        log.info("Se guardo el horario");
+        String subjectName = subjectPort.getSubjectName(subjectId);
+        log.info("Nombre de la materia: {}", subjectName);
+        return scheduleMapper.toResponse(updated, subjectName);
     }
 }

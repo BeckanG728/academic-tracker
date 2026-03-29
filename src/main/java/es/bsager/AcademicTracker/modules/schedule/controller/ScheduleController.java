@@ -44,4 +44,14 @@ public class ScheduleController {
         Map<String, List<SchedulesSummaryResponse>> data = scheduleService.getAllSchedules();
         return ResponseEntity.ok(ApiResponse.success(data));
     }
+
+    @PutMapping("/subjects/{subjectId}/schedules/{scheduleId}")
+    public ResponseEntity<ApiResponse<ScheduleRegisterResponse>> updateSchedule(
+            @PathVariable UUID subjectId,
+            @PathVariable UUID scheduleId,
+            @RequestBody @Valid ScheduleRegisterRequest request
+    ) {
+        ScheduleRegisterResponse data = scheduleService.updateSchedule(subjectId, scheduleId, request);
+        return ResponseEntity.ok(ApiResponse.success(data));
+    }
 }
