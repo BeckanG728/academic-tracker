@@ -1,7 +1,9 @@
 package es.bsager.AcademicTracker.modules.schedule.mapper;
 
 import es.bsager.AcademicTracker.modules.schedule.dto.request.ScheduleRegisterRequest;
+import es.bsager.AcademicTracker.modules.schedule.dto.response.ScheduleDetailsResponse;
 import es.bsager.AcademicTracker.modules.schedule.dto.response.ScheduleRegisterResponse;
+import es.bsager.AcademicTracker.modules.schedule.dto.response.SchedulesSummaryResponse;
 import es.bsager.AcademicTracker.modules.schedule.entity.Schedule;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,4 +21,8 @@ public interface ScheduleMapper {
 
     @Mapping(target = "subjectName", source = "subjectName")
     ScheduleRegisterResponse toResponse(Schedule schedule, String subjectName);
+
+    ScheduleDetailsResponse toDetailsResponse(Schedule schedule);
+
+    SchedulesSummaryResponse toSummaryResponse(Schedule schedule, String subjectName);
 }

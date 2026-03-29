@@ -1,7 +1,9 @@
 package es.bsager.AcademicTracker.modules.schedule.service.impl;
 
 import es.bsager.AcademicTracker.modules.schedule.dto.request.ScheduleRegisterRequest;
+import es.bsager.AcademicTracker.modules.schedule.dto.response.ScheduleDetailsResponse;
 import es.bsager.AcademicTracker.modules.schedule.dto.response.ScheduleRegisterResponse;
+import es.bsager.AcademicTracker.modules.schedule.dto.response.SchedulesSummaryResponse;
 import es.bsager.AcademicTracker.modules.schedule.entity.Schedule;
 import es.bsager.AcademicTracker.modules.schedule.mapper.ScheduleMapper;
 import es.bsager.AcademicTracker.modules.schedule.repository.ScheduleRepository;
@@ -12,7 +14,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,5 +66,33 @@ public class ScheduleServiceImpl implements ScheduleService {
                             request.endTime())
             );
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ScheduleDetailsResponse> getSchedulesBySubjectId(UUID subjectId) {
+        if (!subjectPort.existsById(subjectId)) {
+            throw new IllegalArgumentException("La asignatura con el ID establecido no existe");
+        }
+
+        Specification<Schedule> spec = (root, query, cb) -> cb.equal(root.get("subjectId"), subjectId);
+        List<Schedule> schedules = scheduleRepository.findAll(spec);
+
+        return schedules.stream()
+                .map(scheduleMapper::toDetailsResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, List<SchedulesSummaryResponse>> getAllSchedules() {
+        return scheduleRepository.findAll().stream()
+                .collect(Collectors.groupingBy(
+                        schedule -> schedule.getDayOfWeek().name(),
+                        Collectors.mapping(schedule -> {
+                            String subjectName = subjectPort.getSubjectName(schedule.getSubjectId());
+                            return scheduleMapper.toSummaryResponse(schedule, subjectName);
+                        }, Collectors.toList())
+                ));
     }
 }
