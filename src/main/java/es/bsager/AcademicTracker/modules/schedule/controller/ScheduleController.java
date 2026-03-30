@@ -54,4 +54,13 @@ public class ScheduleController {
         ScheduleRegisterResponse data = scheduleService.updateSchedule(subjectId, scheduleId, request);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
+
+    @DeleteMapping("/subjects/{subjectId}/schedules/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(
+            @PathVariable UUID subjectId,
+            @PathVariable UUID scheduleId
+    ) {
+        scheduleService.deleteSchedule(subjectId, scheduleId);
+        return ResponseEntity.noContent().build();
+    }
 }

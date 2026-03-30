@@ -17,4 +17,6 @@ public interface ScheduleService {
     Map<String, List<SchedulesSummaryResponse>> getAllSchedules();
 
     ScheduleRegisterResponse updateSchedule(UUID subjectId, UUID scheduleId, ScheduleRegisterRequest request);
+
+    void deleteSchedule(UUID subjectId, UUID scheduleId);
 }

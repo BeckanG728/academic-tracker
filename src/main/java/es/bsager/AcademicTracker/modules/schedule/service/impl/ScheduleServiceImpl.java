@@ -111,7 +111,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         validationOverlap(request);
 
         Schedule schedule = scheduleRepository.findById(scheduleId)
-                .filter(subject -> subject.getSubjectId().equals(subjectId))
+                .filter(s -> s.getSubjectId().equals(subjectId))
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Horario no encontrado para la asignatura especificada")
                 );
@@ -130,5 +130,17 @@ public class ScheduleServiceImpl implements ScheduleService {
         String subjectName = subjectPort.getSubjectName(subjectId);
         log.info("Nombre de la materia: {}", subjectName);
         return scheduleMapper.toResponse(updated, subjectName);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSchedule(UUID subjectId, UUID scheduleId) {
+        Schedule scheduleToDelete = scheduleRepository.findById(scheduleId)
+                .filter(schedule -> schedule.getSubjectId().equals(subjectId))
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Horario no encontrado para la asignatura especificada")
+                );
+
+        scheduleRepository.delete(scheduleToDelete);
     }
 }
